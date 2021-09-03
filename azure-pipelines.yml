@@ -1,0 +1,82 @@
+trigger:
+  branches:
+    include:
+      - master
+pr: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+  - stage: Build
+    jobs:
+      - job: Build
+        steps:
+#          - task: NodeTool@0
+#            inputs:
+#              versionSpec: '14.x'
+#            displayName: 'Install Node.js'
+#
+#          - task: YarnInstaller@3
+#            inputs:
+#              versionSpec: '1.x'
+#            displayName: 'Install Yarn'
+#
+#          - script: |
+#              yarn install
+#              tsc
+#            displayName: 'Yarn install and transpile'
+#
+#          - task: ArchiveFiles@2
+#            inputs:
+#              rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+#              includeRootFolder: false
+#              archiveType: 'zip'
+#              archiveFile: '$(Build.ArtifactStagingDirectory)/nukebot-api.zip'
+#              replaceExistingArchive: true
+#
+#          - publish: $(Build.ArtifactStagingDirectory)/nukebot-api.zip
+#            artifact: nukebot-api
+#            displayName: 'Publish Artifacts'
+
+          - task: Docker@2
+            inputs:
+              containerRegistry: 'Docker Hub'
+              repository: 'tylereisenhauer/nukebot-api'
+              command: 'buildAndPush'
+              Dockerfile: '**/Dockerfile'
+              tags: |
+                $(Build.SourceVersion)
+                latest
+              addPipelineData: false
+              addBaseImageData: false
+#  - stage: DeployProd
+#    condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'master'))
+#    displayName: 'Deploy Production'
+#    dependsOn: Build
+#    jobs:
+#      - job: DeployProduction
+#        steps:
+#          - download: current
+#            artifact: nukebot-api
+#            displayName: 'Download Artifacts'
+#
+#          - task: CopyFilesOverSSH@0
+#            inputs:
+#              sshEndpoint: 'Nighthawk'
+#              sourceFolder: '$(Pipeline.Workspace)/nukebot-api'
+#              contents: nukebot-api.zip
+#              targetFolder: '$(TargetFolder)'
+#              readyTimeout: '20000'
+#            displayName: 'Copy files to server'
+#
+#          - task: SSH@0
+#            inputs:
+#              sshEndpoint: 'Nighthawk'
+#              runOptions: 'commands'
+#              commands: |
+#                sudo 7z x $(TargetFolder)/nukebot-api.zip -o$(TargetFolder)/nukebot-api/ -aoa
+#                sudo rm -rf $(TargetFolder)/nukebot-api.zip
+#                sudo chown api $(TargetFolder)/nukebot-api/*
+#                sudo systemctl restart nukebot-api
+#            displayName: 'Restart api service'
