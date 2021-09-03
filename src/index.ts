@@ -26,8 +26,7 @@ setInterval(async () => {
                 entry.content = ipAddress
 
                 const newEntry = await api.updateDnsEntry(entry)
-                console.log(`IP Adress updated for ${entry.name}`)
-                console.log(newEntry)
+                console.log(`IP Address updated for ${newEntry.name}\n${JSON.stringify(newEntry, null, 2)}`)
             }
         }
 
