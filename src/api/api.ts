@@ -8,9 +8,19 @@ export function initializeApiClient() {
     client = axios.create({
         baseURL: 'https://api.cloudflare.com/client/v4/',
         headers: {
-            Authorization: `Bearer ${process.env.CLOUDFLARE_API_KEY}`
+            Authorization: `Bearer ${process.env.CLOUDFLARE_API_KEY}123`
         }
     })
+}
+
+async function getIpAddress(): Promise<string> {
+    try {
+        const {data} = await axios.get('https://ifconfig.io/ip')
+        return data.replace('\n', '')
+    } catch (e) {
+        console.log('Error getting ip address')
+        throw e
+    }
 }
 
 async function getZones(): Promise<Zone[]> {
@@ -18,7 +28,8 @@ async function getZones(): Promise<Zone[]> {
         const {data} = await client.get('zones')
         return data.result
     } catch (e) {
-        console.log(e)
+        console.log('Error getting zones')
+        throw e
     }
 }
 
@@ -31,7 +42,8 @@ async function getDnsEntry(zoneId: string): Promise<DnsEntry[]> {
         })
         return data.result
     } catch (e) {
-        console.log(e)
+        console.log('Error getting dns entries')
+        throw e
     }
 }
 
@@ -45,12 +57,14 @@ async function updateDnsEntry(entry: DnsEntry) {
         })
         return data.result
     } catch (e) {
-        console.log(e)
+        console.log('Error updating dns entries')
+        throw e
     }
 }
 
 export default {
     getZones,
     getDnsEntry,
-    updateDnsEntry
+    updateDnsEntry,
+    getIpAddress
 }
