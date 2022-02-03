@@ -1,4 +1,3 @@
-import axios, {AxiosError} from 'axios'
 import api, {initializeApiClient} from './api/api'
 import {Zone} from './types/zone'
 import {DnsEntry} from './types/dns-entry'
