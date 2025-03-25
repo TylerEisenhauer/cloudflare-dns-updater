@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "tsc && node src/index.js "
+    "start": "tsx watch src/index.js "
   },
   "dependencies": {
     "axios": "^1.8.4",
@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.13.13",
+    "tsx": "^4.19.3",
     "typescript": "^5.8.2"
   }
 }
