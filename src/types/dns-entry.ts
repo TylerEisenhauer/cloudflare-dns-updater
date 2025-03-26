@@ -5,4 +5,6 @@ export interface DnsEntry {
     content: string
     zone_id: string
     ttl: number
+    proxiable: boolean
+    proxied: boolean
 }

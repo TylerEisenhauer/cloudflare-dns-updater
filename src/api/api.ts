@@ -53,7 +53,8 @@ async function updateDnsEntry(entry: DnsEntry) {
       type: entry.type,
       name: entry.name,
       content: entry.content,
-      ttl: entry.ttl
+      ttl: entry.ttl,
+      proxied: entry.proxiable && entry.proxied
     })
     return data.result
   } catch (e) {
